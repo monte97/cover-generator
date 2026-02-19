@@ -17,7 +17,7 @@ module.exports = {
 
     // Output defaults
     defaults: {
-        template: 'minimal',
+        template: 'gen-random',
         format: 'both',           // linkedin | blog | both
         outputDir: 'scripts/cover-generator/output',
         contentDir: 'content/posts',

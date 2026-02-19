@@ -29,6 +29,18 @@ const { TEMPLATES } = require('./lib/templates');
 const { parseFrontMatter, estimateReadingTime } = require('./lib/frontmatter');
 const { getCategoryConfig } = require('./lib/categories');
 
+// gen-random: pick a generative template deterministically from title hash
+const GEN_TEMPLATES = Object.keys(TEMPLATES).filter(k => k.startsWith('gen-')).sort();
+
+function resolveTemplate(name, title) {
+    if (name !== 'gen-random') return name;
+    let h = 0;
+    for (let i = 0; i < title.length; i++) {
+        h = ((h << 5) - h + title.charCodeAt(i)) | 0;
+    }
+    return GEN_TEMPLATES[Math.abs(h) % GEN_TEMPLATES.length];
+}
+
 function parseArgs(args) {
     const options = {
         postDir: null,
@@ -62,17 +74,8 @@ function parseArgs(args) {
 }
 
 async function generateCover(options) {
-    const { postDir, template: templateName, format: formatOption, outputDir } = options;
-
-    console.log(`📐 Generating covers for: ${postDir}`);
-    console.log(`🎨 Template: ${templateName}`);
-    console.log(`📐 Format: ${formatOption}`);
-
-    if (!TEMPLATES[templateName]) {
-        console.error(`❌ Template '${templateName}' not found.`);
-        console.log(`Available templates: ${Object.keys(TEMPLATES).join(', ')}`);
-        process.exit(1);
-    }
+    const { postDir, format: formatOption, outputDir } = options;
+    let templateName = options.template;
 
     const indexFile = path.join(postDir, 'index.md');
     if (!fs.existsSync(indexFile)) {
@@ -88,9 +91,21 @@ async function generateCover(options) {
         process.exit(1);
     }
 
+    // Resolve gen-random to a specific generative template
+    templateName = resolveTemplate(templateName, frontMatter.title);
+
+    if (!TEMPLATES[templateName]) {
+        console.error(`❌ Template '${templateName}' not found.`);
+        console.log(`Available templates: ${Object.keys(TEMPLATES).join(', ')}, gen-random`);
+        process.exit(1);
+    }
+
     const catConfig = getCategoryConfig(frontMatter, postDir, config);
     const readTime = estimateReadingTime(content);
 
+    console.log(`📐 Generating covers for: ${postDir}`);
+    console.log(`🎨 Template: ${templateName}`);
+    console.log(`📐 Format: ${formatOption}`);
     console.log(`📝 Title: ${frontMatter.title}`);
     console.log(`🎨 Category: ${catConfig.label}`);
     console.log(`🎨 Colors: ${catConfig.colors.join(' → ')}`);
@@ -167,8 +182,9 @@ if (!options.postDir) {
     console.log('');
     console.log('Available templates:');
     Object.entries(TEMPLATES).forEach(([key, value]) => {
-        console.log(`  ${key.padEnd(12)} ${value.name}`);
+        console.log(`  ${key.padEnd(16)} ${value.name}`);
     });
+    console.log(`  ${'gen-random'.padEnd(16)} Random generative (picks from gen-* based on title)`);
     console.log('');
     console.log('Examples:');
     console.log('  node scripts/cover-generator/index.js content/posts/kafka/01-intro');
