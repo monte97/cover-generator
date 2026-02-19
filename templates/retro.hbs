@@ -1,0 +1,125 @@
+{{!-- name: Retro CRT --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Courier New', monospace; background: #1a1a2e; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            background: #1a1a2e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 3px,
+                rgba(0,0,0,0.2) 3px,
+                rgba(0,0,0,0.2) 6px
+            );
+            pointer-events: none;
+            z-index: 3;
+        }
+        .noise {
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at center, transparent 0%, rgba(0,0,0,0.4) 100%);
+            z-index: 2;
+        }
+        .stripe-top, .stripe-bottom {
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 4px;
+        }
+        .stripe-top {
+            top: 40px;
+            background: linear-gradient(90deg, {{colors.[0]}}, {{colors.[1]}}, {{colors.[0]}});
+        }
+        .stripe-bottom {
+            bottom: 60px;
+            background: linear-gradient(90deg, {{colors.[1]}}, {{colors.[0]}}, {{colors.[1]}});
+        }
+        .content { position: relative; z-index: 1; }
+        .header-line {
+            font-size: 11px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: {{colors.[0]}};
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+        .icon-text {
+            font-size: 60px;
+            margin-bottom: 16px;
+        }
+        .category {
+            display: inline-block;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #1a1a2e;
+            background: {{colors.[0]}};
+            padding: 5px 14px;
+            margin-bottom: 16px;
+        }
+        .title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.35;
+            color: #e0e0e0;
+            font-family: 'Mulish', -apple-system, sans-serif;
+            max-width: 85%;
+        }
+        .blink-line {
+            margin-top: 20px;
+            font-size: 14px;
+            color: {{colors.[1]}};
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 12px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #555;
+            z-index: 4;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="scanlines"></div>
+        <div class="noise"></div>
+        <div class="stripe-top"></div>
+        <div class="stripe-bottom"></div>
+        <div class="content">
+            <div class="header-line">/// {{brand}} ///</div>
+            <div class="icon-text">{{{icon}}}</div>
+            <div class="category">{{categoryLabel}}</div>
+            <div class="title">{{title}}</div>
+            <div class="blink-line">&gt; READ MORE _ ⏱️ {{readTime}} min</div>
+        </div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>

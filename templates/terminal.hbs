@@ -1,0 +1,111 @@
+{{!-- name: Terminal --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Fira Code', 'JetBrains Mono', 'Courier New', monospace; background: #0c0c0c; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            background: #0c0c0c;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .scanlines {
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                transparent,
+                transparent 2px,
+                rgba(0,0,0,0.15) 2px,
+                rgba(0,0,0,0.15) 4px
+            );
+            pointer-events: none;
+            z-index: 3;
+        }
+        .tab-bar {
+            background: #1a1a2e;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            border-bottom: 1px solid #333;
+        }
+        .tab {
+            padding: 6px 16px;
+            border-radius: 6px 6px 0 0;
+            font-size: 12px;
+            color: #888;
+        }
+        .tab.active {
+            background: #0c0c0c;
+            color: {{colors.[0]}};
+        }
+        .terminal {
+            flex: 1;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+        .line {
+            font-size: 15px;
+            line-height: 2;
+            color: #c0c0c0;
+        }
+        .prompt { color: {{colors.[0]}}; }
+        .flag { color: {{colors.[1]}}; }
+        .str { color: #98c379; }
+        .dim { color: #555; }
+        .comment { color: #555; font-style: italic; }
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 18px;
+            background: {{colors.[0]}};
+            vertical-align: text-bottom;
+            opacity: 0.8;
+        }
+        .footer {
+            padding: 12px 40px;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #555;
+            font-family: 'Fira Code', 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="scanlines"></div>
+        <div class="tab-bar">
+            <span class="tab active">{{{icon}}} {{categoryLabel}}</span>
+            <span class="tab">zsh</span>
+        </div>
+        <div class="terminal">
+            <div class="line"><span class="dim"># {{categoryLabel}}</span></div>
+            <div class="line"><span class="prompt">$</span> cat <span class="str">article.md</span> <span class="flag">--title</span></div>
+            <div class="line"><span class="str">"{{title}}"</span></div>
+            <div class="line"></div>
+            <div class="line"><span class="prompt">$</span> read <span class="flag">--estimate</span></div>
+            <div class="line">⏱️  {{readTime}} min</div>
+            <div class="line"></div>
+            <div class="line"><span class="prompt">$</span> <span class="cursor"></span></div>
+        </div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>

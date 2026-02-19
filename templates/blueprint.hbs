@@ -1,0 +1,129 @@
+{{!-- name: Blueprint --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Mulish', -apple-system, sans-serif; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            background: {{colors.[0]}};
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .grid {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+        .grid-major {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,0.12) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px);
+            background-size: 150px 150px;
+        }
+        .corner-mark {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(255,255,255,0.25);
+        }
+        .corner-tl { top: 30px; left: 30px; border-right: none; border-bottom: none; }
+        .corner-tr { top: 30px; right: 30px; border-left: none; border-bottom: none; }
+        .corner-bl { bottom: 30px; left: 30px; border-right: none; border-top: none; }
+        .corner-br { bottom: 30px; right: 30px; border-left: none; border-top: none; }
+        .content { position: relative; z-index: 1; }
+        .ref-number {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.4);
+            margin-bottom: 20px;
+            font-family: 'Fira Code', monospace;
+        }
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+        .title {
+            font-size: 36px;
+            font-weight: 700;
+            line-height: 1.25;
+            color: #fff;
+            max-width: 90%;
+        }
+        .dimension-line {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 2px;
+            height: 60%;
+            background: rgba(255,255,255,0.15);
+        }
+        .dimension-line::before, .dimension-line::after {
+            content: '';
+            position: absolute;
+            left: -4px;
+            width: 10px;
+            height: 2px;
+            background: rgba(255,255,255,0.15);
+        }
+        .dimension-line::before { top: 0; }
+        .dimension-line::after { bottom: 0; }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: rgba(255,255,255,0.45);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="grid"></div>
+        <div class="grid-major"></div>
+        <div class="corner-mark corner-tl"></div>
+        <div class="corner-mark corner-tr"></div>
+        <div class="corner-mark corner-bl"></div>
+        <div class="corner-mark corner-br"></div>
+        <div class="dimension-line"></div>
+        <div class="content">
+            <div class="ref-number">REF. {{categoryLabel}}</div>
+            <div class="icon-circle">{{{icon}}}</div>
+            <div class="title">{{title}}</div>
+        </div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>

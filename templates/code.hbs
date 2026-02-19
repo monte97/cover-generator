@@ -1,0 +1,100 @@
+{{!-- name: Code Editor --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Mulish', -apple-system, sans-serif; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            background: #1e1e2e;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .title-bar {
+            background: #181825;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27ca4b; }
+        .content {
+            flex: 1;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .code-line {
+            font-family: 'Fira Code', 'JetBrains Mono', monospace;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .keyword { color: #c678dd; }
+        .string { color: #98c379; }
+        .function { color: #61afef; }
+        .comment { color: #5c6370; font-style: italic; }
+        .category-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba({{hexToRgb colors.[0]}}, 0.2);
+            color: {{colors.[0]}};
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-family: monospace;
+            width: fit-content;
+            margin-bottom: 15px;
+        }
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #abb2bf;
+            line-height: 1.4;
+        }
+        .footer {
+            padding: 12px 40px;
+            background: #181825;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #5c6370;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="title-bar">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="content">
+            <div class="category-badge">{{{icon}}} {{categoryLabel}}</div>
+            <div class="code-line"><span class="keyword">const</span> <span class="function">articolo</span> = {</div>
+            <div class="code-line" style="padding-left: 20px;"><span class="string">titolo</span>: <span class="string">"{{truncate title 40}}"</span>,</div>
+            <div class="code-line" style="padding-left: 20px;"><span class="string">tempo</span>: <span class="string">"{{readTime}} min"</span></div>
+            <div class="code-line">};</div>
+            <div class="code-line comment">// Leggi l'articolo completo →</div>
+        </div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,91 @@
+{{!-- name: Dark Geometric --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Mulish', -apple-system, sans-serif; background: #0a0a0f; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            background: #0a0a0f;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        .accent-bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 6px;
+            background: linear-gradient(180deg, {{colors.[0]}} 0%, {{colors.[1]}} 100%);
+        }
+        .bg-shape {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba({{hexToRgb colors.[0]}}, 0.1) 100%);
+            clip-path: polygon(30% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        .icon-badge {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, {{colors.[0]}} 0%, {{colors.[1]}} 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            margin-bottom: 25px;
+        }
+        .category {
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: {{colors.[0]}};
+            margin-bottom: 12px;
+        }
+        .title {
+            font-size: 34px;
+            font-weight: 700;
+            line-height: 1.3;
+            color: #fff;
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 50px;
+            background: rgba(255,255,255,0.03);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="accent-bar"></div>
+        <div class="bg-shape"></div>
+        <div class="icon-badge">{{{icon}}}</div>
+        <div class="category">{{categoryLabel}}</div>
+        <div class="title">{{title}}</div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>

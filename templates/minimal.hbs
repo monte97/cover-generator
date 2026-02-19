@@ -1,0 +1,72 @@
+{{!-- name: Minimal Gradient --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Mulish', -apple-system, BlinkMacSystemFont, sans-serif; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            background: linear-gradient(135deg, {{colors.[0]}} 0%, {{colors.[1]}} 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px 80px;
+            position: relative;
+        }
+        .icon-box {
+            position: absolute;
+            top: 50px;
+            right: 80px;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+        }
+        .category {
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            color: rgba(255,255,255,0.95);
+        }
+        .title {
+            font-size: 52px;
+            font-weight: 700;
+            line-height: 1.2;
+            color: #ffffff;
+            max-width: 85%;
+        }
+        .footer {
+            position: absolute;
+            bottom: 30px;
+            left: 80px;
+            right: 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: rgba(255,255,255,0.85);
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="icon-box">{{{icon}}}</div>
+        <div class="category">{{categoryLabel}}</div>
+        <div class="title">{{title}}</div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>

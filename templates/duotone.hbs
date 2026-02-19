@@ -1,0 +1,103 @@
+{{!-- name: Duotone --}}
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: {{width}}px; height: {{height}}px; overflow: hidden; }
+        body { font-family: 'Mulish', -apple-system, sans-serif; }
+        .cover {
+            width: {{width}}px;
+            height: {{height}}px;
+            position: relative;
+            overflow: hidden;
+        }
+        .bg-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: {{colors.[0]}};
+        }
+        .bg-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 55%;
+            height: 100%;
+            background: {{colors.[1]}};
+            clip-path: polygon(20% 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 50px 60px;
+        }
+        .icon-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .icon-bg {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+        }
+        .category {
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: rgba(255,255,255,0.85);
+        }
+        .title {
+            font-size: 48px;
+            font-weight: 900;
+            line-height: 1.1;
+            color: #fff;
+            max-width: 75%;
+        }
+        .footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: rgba(255,255,255,0.7);
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover">
+        <div class="bg-left"></div>
+        <div class="bg-right"></div>
+        <div class="content">
+            <div class="icon-row">
+                <div class="icon-bg">{{{icon}}}</div>
+                <div class="category">{{categoryLabel}}</div>
+            </div>
+            <div class="title">{{title}}</div>
+        </div>
+        <div class="footer">
+            {{> social-footer theme="dark"}}
+        </div>
+    </div>
+</body>
+</html>
