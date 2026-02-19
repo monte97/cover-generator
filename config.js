@@ -19,7 +19,7 @@ module.exports = {
     defaults: {
         template: 'minimal',
         format: 'both',           // linkedin | blog | both
-        outputDir: 'static/images/covers',
+        outputDir: 'scripts/cover-generator/output',
         contentDir: 'content/posts',
     },
 
