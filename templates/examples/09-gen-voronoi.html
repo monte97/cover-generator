@@ -17,21 +17,21 @@
             background: radial-gradient(
                 ellipse at center,
                 rgba(0,0,0,0.6) 0%,
-                rgba(0,0,0,0.2) 60%,
-                transparent 100%
+                rgba(0,0,0,0.25) 55%,
+                rgba(0,0,0,0.1) 100%
             );
         }
         .category {
             font-size: 16px; font-weight: 700;
             text-transform: uppercase; letter-spacing: 3px;
-            color: #F59E0B;
+            color: #8B5CF6;
             margin-bottom: 16px;
         }
         .title {
             font-size: 48px; font-weight: 700;
             line-height: 1.15; color: #fff;
             max-width: 85%;
-            text-shadow: 0 2px 30px rgba(0,0,0,0.6);
+            text-shadow: 0 2px 20px rgba(0,0,0,0.5);
         }
         .footer {
             position: absolute; bottom: 30px; left: 80px; right: 80px;
@@ -97,10 +97,6 @@
             return [r, g, b];
         }
 
-        function dist(x1, y1, x2, y2) {
-            return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
-        }
-
         var W = 1200, H = 627;
         var canvas = document.getElementById('c');
         var ctx = canvas.getContext('2d');
@@ -110,65 +106,77 @@
         var c1 = hexToRgb('#8B5CF6');
         var c2 = hexToRgb('#F59E0B');
 
-        // Dark background
-        ctx.fillStyle = '#0c0c18';
+        // Background
+        ctx.fillStyle = '#0a0a1a';
         ctx.fillRect(0, 0, W, H);
 
-        // Circle packing
-        var circles = [];
-        var MAX_ATTEMPTS = 8000;
-        var MIN_R = 4;
-        var MAX_R = 120;
-        var PADDING = 3;
+        // Generate seed points
+        var NUM_POINTS = 80 + Math.floor(rand() * 40);
+        var points = [];
+        for (var i = 0; i < NUM_POINTS; i++) {
+            points.push({ x: rand() * W, y: rand() * H });
+        }
 
-        for (var attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-            var cx = rand() * W;
-            var cy = rand() * H;
+        // Draw Voronoi via brute-force pixel sampling
+        // Sample at lower resolution for performance, then draw cells
+        var STEP = 4;
+        var cellColors = [];
+        for (var i = 0; i < NUM_POINTS; i++) {
+            var t = i / NUM_POINTS;
+            // Mix colors with some randomness
+            var jitter = (rand() - 0.5) * 0.3;
+            t = Math.max(0, Math.min(1, t + jitter));
+            var r = Math.round(c1[0] + (c2[0] - c1[0]) * t);
+            var g = Math.round(c1[1] + (c2[1] - c1[1]) * t);
+            var b = Math.round(c1[2] + (c2[2] - c1[2]) * t);
+            cellColors.push([r, g, b]);
+        }
 
-            // Find max radius before hitting another circle or edge
-            var maxR = Math.min(cx, cy, W - cx, H - cy, MAX_R);
+        // For each pixel block, find nearest point
+        for (var py = 0; py < H; py += STEP) {
+            for (var px = 0; px < W; px += STEP) {
+                var minDist = Infinity;
+                var minDist2 = Infinity;
+                var closest = 0;
 
-            for (var i = 0; i < circles.length; i++) {
-                var d = dist(cx, cy, circles[i].x, circles[i].y) - circles[i].r - PADDING;
-                if (d < maxR) maxR = d;
+                for (var i = 0; i < NUM_POINTS; i++) {
+                    var dx = px - points[i].x;
+                    var dy = py - points[i].y;
+                    var d = dx * dx + dy * dy;
+                    if (d < minDist) {
+                        minDist2 = minDist;
+                        minDist = d;
+                        closest = i;
+                    } else if (d < minDist2) {
+                        minDist2 = d;
+                    }
+                }
+
+                var cc = cellColors[closest];
+                // Edge detection: darken pixels near cell boundaries
+                var edgeDist = Math.sqrt(minDist2) - Math.sqrt(minDist);
+                var edgeThreshold = 6;
+
+                if (edgeDist < edgeThreshold) {
+                    // Cell edge — draw bright line
+                    var edgeAlpha = 0.15 + (1 - edgeDist / edgeThreshold) * 0.25;
+                    ctx.fillStyle = 'rgba(' + cc[0] + ',' + cc[1] + ',' + cc[2] + ',' + edgeAlpha + ')';
+                } else {
+                    // Cell interior — subtle fill
+                    ctx.fillStyle = 'rgba(' + cc[0] + ',' + cc[1] + ',' + cc[2] + ',0.06)';
+                }
+                ctx.fillRect(px, py, STEP, STEP);
             }
+        }
 
-            if (maxR < MIN_R) continue;
-
-            // Radius with some randomness
-            var r = MIN_R + rand() * (maxR - MIN_R) * 0.7;
-            if (r < MIN_R) continue;
-
-            circles.push({ x: cx, y: cy, r: r });
-
-            // Color based on distance from center
-            var distFromCenter = dist(cx, cy, W * 0.6, H * 0.3) / (W * 0.6);
-            var t = Math.min(1, distFromCenter);
-            var cr = Math.round(c1[0] + (c2[0] - c1[0]) * t);
-            var cg = Math.round(c1[1] + (c2[1] - c1[1]) * t);
-            var cb = Math.round(c1[2] + (c2[2] - c1[2]) * t);
-
-            // Draw circle
-            var style = rand();
-            ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
-
-            if (style < 0.4) {
-                // Filled with low opacity
-                ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (0.06 + rand() * 0.15) + ')';
+        // Draw seed points as small dots
+        for (var i = 0; i < NUM_POINTS; i++) {
+            if (rand() < 0.3) {
+                var cc = cellColors[i];
+                ctx.beginPath();
+                ctx.arc(points[i].x, points[i].y, 1.5 + rand() * 2, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(' + cc[0] + ',' + cc[1] + ',' + cc[2] + ',0.4)';
                 ctx.fill();
-            } else if (style < 0.7) {
-                // Stroke only
-                ctx.strokeStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (0.1 + rand() * 0.2) + ')';
-                ctx.lineWidth = 1 + rand() * 1.5;
-                ctx.stroke();
-            } else {
-                // Fill + stroke
-                ctx.fillStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (0.04 + rand() * 0.08) + ')';
-                ctx.fill();
-                ctx.strokeStyle = 'rgba(' + cr + ',' + cg + ',' + cb + ',' + (0.15 + rand() * 0.15) + ')';
-                ctx.lineWidth = 1;
-                ctx.stroke();
             }
         }
     })();

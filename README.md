@@ -46,24 +46,26 @@ Each template is a `.hbs` file in `templates/`. Previews at LinkedIn size (1200x
 
 | | | |
 |:---:|:---:|:---:|
-| ![gen-flow](templates/examples/06-gen-flow.png) | ![gen-geo](templates/examples/07-gen-geo.png) | ![gen-circles](templates/examples/05-gen-circles.png) |
+| ![gen-flow](templates/examples/07-gen-flow.png) | ![gen-geo](templates/examples/08-gen-geo.png) | ![gen-circles](templates/examples/05-gen-circles.png) |
 | `gen-flow` | `gen-geo` | `gen-circles` |
+| ![gen-voronoi](templates/examples/09-gen-voronoi.png) | ![gen-constellation](templates/examples/06-gen-constellation.png) | |
+| `gen-voronoi` | `gen-constellation` | |
 
 ### Static
 
 | | | |
 |:---:|:---:|:---:|
-| ![minimal](templates/examples/11-minimal.png) | ![dark](templates/examples/03-dark.png) | ![split](templates/examples/16-split.png) |
+| ![minimal](templates/examples/13-minimal.png) | ![dark](templates/examples/03-dark.png) | ![split](templates/examples/18-split.png) |
 | `minimal` | `dark` | `split` |
-| ![glass](templates/examples/08-glass.png) | ![neon](templates/examples/12-neon.png) | ![magazine](templates/examples/09-magazine.png) |
+| ![glass](templates/examples/10-glass.png) | ![neon](templates/examples/14-neon.png) | ![magazine](templates/examples/11-magazine.png) |
 | `glass` | `neon` | `magazine` |
-| ![code](templates/examples/02-code.png) | ![mesh](templates/examples/10-mesh.png) | ![terminal](templates/examples/18-terminal.png) |
+| ![code](templates/examples/02-code.png) | ![mesh](templates/examples/12-mesh.png) | ![terminal](templates/examples/20-terminal.png) |
 | `code` | `mesh` | `terminal` |
-| ![polaroid](templates/examples/14-polaroid.png) | ![blueprint](templates/examples/01-blueprint.png) | ![duotone](templates/examples/04-duotone.png) |
+| ![polaroid](templates/examples/16-polaroid.png) | ![blueprint](templates/examples/01-blueprint.png) | ![duotone](templates/examples/04-duotone.png) |
 | `polaroid` | `blueprint` | `duotone` |
-| ![retro](templates/examples/15-retro.png) | ![wave](templates/examples/19-wave.png) | ![outline](templates/examples/13-outline.png) |
+| ![retro](templates/examples/17-retro.png) | ![wave](templates/examples/21-wave.png) | ![outline](templates/examples/15-outline.png) |
 | `retro` | `wave` | `outline` |
-| ![stack](templates/examples/17-stack.png) | | |
+| ![stack](templates/examples/19-stack.png) | | |
 | `stack` | | |
 
 ## Creating a New Template
