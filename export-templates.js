@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 /**
- * Template HTML Generator
- * Generates static HTML files for each template for git tracking.
+ * Template Exporter
+ * Generates static HTML + PNG previews for each template.
  *
  * Usage:
- *   node scripts/cover-generator/export-templates.js
+ *   node export-templates.js              # HTML + PNG
+ *   node export-templates.js --html-only  # HTML only (no Playwright needed)
  */
 
 const fs = require('fs');
@@ -15,6 +16,7 @@ const config = require('./config');
 const { TEMPLATES } = require('./lib/templates');
 
 const OUTPUT_DIR = path.join(__dirname, 'templates', 'examples');
+const HTML_ONLY = process.argv.includes('--html-only');
 
 const SAMPLE_DATA = {
     title: 'Kafka in Pratica 1: Architettura di un Flusso di Eventi',
@@ -26,17 +28,19 @@ const SAMPLE_DATA = {
     readTime: 12,
 };
 
-const LINKEDIN_DIMENSIONS = { width: 1200, height: 627 };
+const DIMENSIONS = { width: 1200, height: 627 };
 
-function main() {
-    console.log('📐 Generating static HTML templates...\n');
+async function main() {
+    console.log(`📐 Exporting templates (${HTML_ONLY ? 'HTML only' : 'HTML + PNG'})...\n`);
 
     if (!fs.existsSync(OUTPUT_DIR)) {
         fs.mkdirSync(OUTPUT_DIR, { recursive: true });
     }
 
     const templateIds = Object.keys(TEMPLATES).sort();
+    const htmlFiles = [];
 
+    // Generate HTML files
     for (const [index, id] of templateIds.entries()) {
         const template = TEMPLATES[id];
         const paddedIndex = String(index + 1).padStart(2, '0');
@@ -46,26 +50,61 @@ function main() {
         try {
             const html = template.generate(
                 SAMPLE_DATA,
-                LINKEDIN_DIMENSIONS.width,
-                LINKEDIN_DIMENSIONS.height
+                DIMENSIONS.width,
+                DIMENSIONS.height
             );
             fs.writeFileSync(outputPath, html, 'utf-8');
-
-            console.log(`✅ Generated: ${outputPath}`);
-            console.log(`   Template: ${template.name}`);
-            console.log(`   Category: ${SAMPLE_DATA.categoryLabel}`);
-            console.log(`   Colors: ${SAMPLE_DATA.colors.join(' → ')}`);
-            console.log('');
+            htmlFiles.push({ id, index, paddedIndex, fileName, outputPath, name: template.name });
+            console.log(`  ✅ ${fileName}  (${template.name})`);
         } catch (error) {
-            console.error(`❌ Error generating ${fileName}:`, error.message);
+            console.error(`  ❌ ${fileName}: ${error.message}`);
         }
     }
 
     generateIndexFile(templateIds);
 
-    console.log('🎉 Done!');
-    console.log(`\n📂 Output directory: ${OUTPUT_DIR}/`);
-    console.log(`📄 Open: ${path.join(OUTPUT_DIR, 'index.html')}`);
+    // Generate PNG screenshots
+    if (!HTML_ONLY) {
+        let chromium;
+        try {
+            ({ chromium } = require('playwright'));
+        } catch {
+            console.error('\n❌ Playwright not installed — PNG generation skipped.');
+            console.error('   Run: npm install && npm run install-browser');
+            console.error('   Or use --html-only to skip PNG generation.\n');
+            return;
+        }
+
+        console.log('\n📸 Generating PNG previews...\n');
+        const browser = await chromium.launch();
+
+        for (const { id, paddedIndex, fileName, outputPath, name } of htmlFiles) {
+            const pngName = `${paddedIndex}-${id}.png`;
+            const pngPath = path.join(OUTPUT_DIR, pngName);
+
+            try {
+                const page = await browser.newPage({
+                    viewport: { width: DIMENSIONS.width, height: DIMENSIONS.height },
+                });
+                const html = fs.readFileSync(outputPath, 'utf-8');
+                await page.setContent(html);
+                await page.screenshot({
+                    path: pngPath,
+                    type: 'png',
+                    clip: { x: 0, y: 0, width: DIMENSIONS.width, height: DIMENSIONS.height },
+                });
+                await page.close();
+                console.log(`  ✅ ${pngName}  (${name})`);
+            } catch (error) {
+                console.error(`  ❌ ${pngName}: ${error.message}`);
+            }
+        }
+
+        await browser.close();
+    }
+
+    console.log('\n🎉 Done!');
+    console.log(`📂 ${OUTPUT_DIR}/`);
 }
 
 function generateIndexFile(templateIds) {
@@ -149,7 +188,9 @@ function generateIndexFile(templateIds) {
 
     const indexPath = path.join(OUTPUT_DIR, 'index.html');
     fs.writeFileSync(indexPath, indexHTML, 'utf-8');
-    console.log(`✅ Generated index: ${indexPath}\n`);
 }
 
-main();
+main().catch(err => {
+    console.error('❌ Error:', err);
+    process.exit(1);
+});

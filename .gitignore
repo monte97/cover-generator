@@ -6,5 +6,3 @@ output/
 # Generated HTML previews (regenerate with: npm run cover:export)
 templates/html/
 
-# Sample PNGs in examples
-templates/examples/*.png
