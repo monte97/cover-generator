@@ -15,7 +15,14 @@
 
 const fs = require('fs');
 const path = require('path');
-const { chromium } = require('playwright');
+
+let chromium;
+try {
+    ({ chromium } = require('playwright'));
+} catch {
+    console.error('❌ Playwright not installed. Run: npm install && npm run install-browser');
+    process.exit(1);
+}
 
 const config = require('./config');
 const { TEMPLATES } = require('./lib/templates');

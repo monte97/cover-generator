@@ -9,26 +9,26 @@ Playwright-based cover image generator for blog posts and LinkedIn. Reads Hugo f
 ## Commands
 
 ```bash
-# Install deps (run from repo root: website.github.io/)
-npm install && npm run cover:install
+# Install deps (from cover-generator directory)
+npm install && npm run install-browser
 
 # Generate cover for a single article
-node scripts/cover-generator/index.js content/posts/kafka/01-intro --template dark
+npm run gen -- content/posts/kafka/01-intro --template dark
 
 # Batch generate for a series
-node scripts/cover-generator/generate-all.js kafka --template dark
+npm run all -- kafka --template dark
 
 # Export static HTML previews of all templates
-npm run cover:export
+npm run export
 
-# List available templates (run without arguments)
-node scripts/cover-generator/index.js
+# Create a new template from scaffold
+make new-template NAME=my-theme
 
-# List available series (run without arguments)
-node scripts/cover-generator/generate-all.js
+# From Hugo site root (alternative)
+npm run cover:gen -- content/posts/kafka/01-intro --template dark
+npm run cover:all -- kafka --template dark
+make -f scripts/cover-generator/Makefile gen POST=content/posts/kafka/01-intro TEMPLATE=dark
 ```
-
-**Note:** The `cover:gen` and `cover:all` npm scripts in `package.json` point to `scripts/cover-gen.js` and `scripts/cover-all.js` which don't exist. Use the full paths above instead.
 
 ## Architecture
 
@@ -44,7 +44,7 @@ index.md → parseFrontMatter() → getCategoryConfig() → Handlebars template 
 
 - **`index.js`** — CLI entry point for single article generation. Parses args, reads frontmatter, launches Playwright, screenshots HTML.
 - **`generate-all.js`** — Batch CLI. Walks a series directory, shells out to `index.js` for each article via `execSync`.
-- **`lib/templates.js`** — Handlebars auto-discovery loader. Registers helpers (`hexToRgb`, `truncate`, `eq`), registers partials from `templates/partials/`, auto-discovers all `.hbs` files in `templates/`, compiles them, and exposes the `TEMPLATES` registry mapping IDs to `{ name, generate }`.
+- **`lib/templates.js`** — Handlebars auto-discovery loader. Registers helpers (`hexToRgb`, `truncate`, `eq`), registers partials from `templates/partials/`, auto-discovers all `.hbs` files in `templates/` (skipping files starting with `_`), compiles them, and exposes the `TEMPLATES` registry mapping IDs to `{ name, generate }`.
 - **`lib/categories.js`** — `getCategoryConfig()` resolves category in priority order: directory path → tags → title keywords → categories field → default fallback.
 - **`lib/frontmatter.js`** — Lightweight YAML parser (regex-based) + reading time estimator (~200 wpm).
 - **`export-templates.js`** — Generates static HTML preview files from the `TEMPLATES` registry.
@@ -70,10 +70,12 @@ Template data: `{ title, categoryLabel, icon, colors, brand, social, readTime, w
 
 ### Adding a New Template
 
-1. Create `templates/your-template.hbs` — a full HTML document with Handlebars expressions
-2. Add `{{!-- name: Your Template Name --}}` as the first line
-3. Use `{{> social-footer theme="dark"}}` for the footer
-4. It's automatically discovered — no code changes needed
+1. Run `make new-template NAME=my-theme` (creates from `_scaffold.hbs`)
+2. Edit the generated `templates/my-theme.hbs` — customize CSS and layout
+3. The `{{!-- name: Display Name --}}` comment on line 1 sets the display name
+4. Use `{{> social-footer theme="dark"}}` for the footer
+5. It's automatically discovered — no code changes needed
+6. Files starting with `_` are ignored by auto-discovery
 
 ### Output
 

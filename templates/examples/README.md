@@ -1,62 +1,55 @@
 # Template Examples
 
-Questa directory contiene esempi e anteprime dei template.
+Questa directory contiene anteprime HTML statiche di tutti i 16 template disponibili.
 
-## 📁 File
+## Visualizzare le anteprime
+
+Apri `index.html` nel browser per una galleria con tutti i template:
+
+```bash
+# Linux
+xdg-open templates/examples/index.html
+
+# macOS
+open templates/examples/index.html
+```
+
+Oppure apri i singoli file per vedere un template specifico a dimensione reale.
+
+## File generati
+
+| File | Template |
+|------|----------|
+| [`01-blueprint.html`](01-blueprint.html) | Blueprint |
+| [`02-code.html`](02-code.html) | Code Editor |
+| [`03-dark.html`](03-dark.html) | Dark Geometric |
+| [`04-duotone.html`](04-duotone.html) | Duotone |
+| [`05-glass.html`](05-glass.html) | Glassmorphism |
+| [`06-magazine.html`](06-magazine.html) | Magazine Style |
+| [`07-mesh.html`](07-mesh.html) | Gradient Mesh |
+| [`08-minimal.html`](08-minimal.html) | Minimal Gradient |
+| [`09-neon.html`](09-neon.html) | Neon Cyber |
+| [`10-outline.html`](10-outline.html) | Outline |
+| [`11-polaroid.html`](11-polaroid.html) | Polaroid |
+| [`12-retro.html`](12-retro.html) | Retro CRT |
+| [`13-split.html`](13-split.html) | Split Color |
+| [`14-stack.html`](14-stack.html) | Stack |
+| [`15-terminal.html`](15-terminal.html) | Terminal |
+| [`16-wave.html`](16-wave.html) | Wave |
+
+## Rigenerare
+
+Per rigenerare le anteprime dopo aver modificato un template:
+
+```bash
+make export
+# oppure
+npm run export
+```
+
+## File legacy
 
 | File | Descrizione |
 |------|-------------|
-| `alternative-templates.html` | Anteprima di tutti gli 8 template |
+| `alternative-templates.html` | Vecchia anteprima degli 8 template originali |
 | `cover-design-final.html` | Design minimale originale |
-
-## 🖼️ Utilizzo
-
-### Anteprima Tutti i Template
-
-Apri `alternative-templates.html` nel browser per vedere tutti i template disponibili:
-
-```bash
-# macOS
-open scripts/cover-generator/templates/examples/alternative-templates.html
-
-# Linux
-xdg-open scripts/cover-generator/templates/examples/alternative-templates.html
-
-# Windows
-start scripts/cover-generator/templates/examples/alternative-templates.html
-```
-
-Questa pagina mostra:
-- Tutti gli 8 template in formato LinkedIn (1200×627)
-- Esempi con categorie diverse (Kafka, Keycloak, Kubernetes, Testing)
-- Confronto visivo tra i vari stili
-
-### Design Minimo Original
-
-Il file `cover-design-final.html` mostra il design minimale originale che è stato poi implementato come template `minimal` nel generatore.
-
-## 📊 Template Disponibili nel Generatore
-
-Questi file sono solo esempi visivi. I template effettivi sono implementati in:
-
-- [`generate-cover.js`](../../generate-cover.js) - Funzioni generatrici
-- [`README.md`](../README.md) - Documentazione template
-
-## 🎨 Template Mostrati
-
-L'anteprima include:
-
-1. **Minimal Gradient** - Gradiente + icona
-2. **Dark Geometric** - Sfondo scuro + barra colorata
-3. **Split Color** - Diviso testo | icona
-4. **Glassmorphism** - Effetto vetro
-5. **Neon Cyber** - Griglia + glow
-6. **Magazine Style** - Layout editoriale
-7. **Code Editor** - Sembra VS Code
-8. **Gradient Mesh** - Gradienti fluidi 3D
-
-## 🔗 Riferimenti
-
-- [`../README.md`](../README.md) - Documentazione template
-- [`../../COVER_GENERATOR.md`](../../COVER_GENERATOR.md) - Guida completa
-- [`../../QUICKSTART.md`](../../QUICKSTART.md) - Referenza rapida

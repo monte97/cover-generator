@@ -20,15 +20,23 @@ Built with [Playwright](https://playwright.dev/) + [Handlebars](https://handleba
 
 ## Quick Start
 
+### Standalone (recommended for forks)
+
 ```bash
-# 1. Install dependencies (from Hugo site root)
+cd scripts/cover-generator   # or wherever you cloned the repo
+npm install
+npm run install-browser       # downloads Chromium for Playwright
+npm run gen -- content/posts/kafka/01-intro --template dark
+```
+
+### From Hugo site root
+
+```bash
 make -f scripts/cover-generator/Makefile install
-
-# 2. Edit config.js with your branding (see below)
-
-# 3. Generate a cover
 make -f scripts/cover-generator/Makefile gen POST=content/posts/kafka/01-intro TEMPLATE=dark
 ```
+
+Edit `config.js` with your branding before generating covers (see below).
 
 ---
 
@@ -143,39 +151,86 @@ module.exports = {
 
 Each template is a standalone `.hbs` (Handlebars) file in `templates/`. You can open them in any HTML editor, modify the layout and CSS, and see results immediately.
 
-| ID | Name | Style | Best for |
-|:---|:-----|:------|:---------|
-| `minimal` | Minimal Gradient | Gradient background, icon box top-right | LinkedIn, clean look |
-| `dark` | Dark Geometric | Dark bg, accent bar, geometric shapes | Tech, backend |
-| `split` | Split Color | 65/35 split: text \| large icon | Visual impact, social |
-| `glass` | Glassmorphism | Frosted glass card, blur effects | Modern, trendy |
-| `neon` | Neon Cyber | Grid background, glow effects | Developer, cyberpunk |
-| `magazine` | Magazine Style | Editorial layout, issue number | Series, publications |
-| `code` | Code Editor | VS Code-style title bar | Developer content |
-| `mesh` | Gradient Mesh | 3D radial gradient blobs | Creative, modern |
-| `terminal` | Terminal | CLI prompt with commands, scanlines | DevOps, backend |
-| `polaroid` | Polaroid | White card frame, shadow, dot grid | Photography, creative |
-| `blueprint` | Blueprint | Technical grid, corner marks, reference ID | Architecture, infra |
-| `duotone` | Duotone | Bold diagonal split, two flat colors | Impact, branding |
-| `retro` | Retro CRT | Scanlines, color stripes, vintage monitor | Retro, fun |
-| `wave` | Wave | Layered wave shapes, dark background | Elegant, modern |
-| `outline` | Outline | Light bg, colored border frame, circles | Clean, minimal |
-| `stack` | Stack | Stacked rotated cards, dark background | Series, collections |
+Static HTML previews of all templates are available in [`templates/examples/`](templates/examples/) — open [`index.html`](templates/examples/index.html) for a gallery view.
 
-Preview all templates locally:
+| ID | Name | Style | Preview | Best for |
+|:---|:-----|:------|:--------|:---------|
+| `minimal` | Minimal Gradient | Gradient background, icon box top-right | [preview](templates/examples/08-minimal.html) | LinkedIn, clean look |
+| `dark` | Dark Geometric | Dark bg, accent bar, geometric shapes | [preview](templates/examples/03-dark.html) | Tech, backend |
+| `split` | Split Color | 65/35 split: text \| large icon | [preview](templates/examples/13-split.html) | Visual impact, social |
+| `glass` | Glassmorphism | Frosted glass card, blur effects | [preview](templates/examples/05-glass.html) | Modern, trendy |
+| `neon` | Neon Cyber | Grid background, glow effects | [preview](templates/examples/09-neon.html) | Developer, cyberpunk |
+| `magazine` | Magazine Style | Editorial layout, issue number | [preview](templates/examples/06-magazine.html) | Series, publications |
+| `code` | Code Editor | VS Code-style title bar | [preview](templates/examples/02-code.html) | Developer content |
+| `mesh` | Gradient Mesh | 3D radial gradient blobs | [preview](templates/examples/07-mesh.html) | Creative, modern |
+| `terminal` | Terminal | CLI prompt with commands, scanlines | [preview](templates/examples/15-terminal.html) | DevOps, backend |
+| `polaroid` | Polaroid | White card frame, shadow, dot grid | [preview](templates/examples/11-polaroid.html) | Photography, creative |
+| `blueprint` | Blueprint | Technical grid, corner marks, reference ID | [preview](templates/examples/01-blueprint.html) | Architecture, infra |
+| `duotone` | Duotone | Bold diagonal split, two flat colors | [preview](templates/examples/04-duotone.html) | Impact, branding |
+| `retro` | Retro CRT | Scanlines, color stripes, vintage monitor | [preview](templates/examples/12-retro.html) | Retro, fun |
+| `wave` | Wave | Layered wave shapes, dark background | [preview](templates/examples/16-wave.html) | Elegant, modern |
+| `outline` | Outline | Light bg, colored border frame, circles | [preview](templates/examples/10-outline.html) | Clean, minimal |
+| `stack` | Stack | Stacked rotated cards, dark background | [preview](templates/examples/14-stack.html) | Series, collections |
+
+Regenerate previews after modifying templates:
 
 ```bash
-make -f scripts/cover-generator/Makefile export
-open scripts/cover-generator/templates/html/index.html
+make export
+# or: npm run export
 ```
 
 ### Creating a New Template
 
-1. Create `templates/your-template.hbs` — a full HTML document
-2. Add `{{!-- name: Your Template Name --}}` as the first line
-3. Use Handlebars expressions for dynamic data (see below)
-4. Use `{{> social-footer theme="dark"}}` for the footer
-5. Done — the template is auto-discovered, no code changes needed
+The fastest way is the scaffold command:
+
+```bash
+make new-template NAME=my-theme
+# → creates templates/my-theme.hbs from the scaffold
+```
+
+Or copy manually: `cp templates/_scaffold.hbs templates/my-theme.hbs`
+
+#### Template structure
+
+Every `.hbs` template is a self-contained HTML document with three parts:
+
+```
+{{!-- name: My Theme --}}       ← 1. Name comment (first line, required)
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* 2. CSS — all your styling lives here */
+    html, body { width: {{width}}px; height: {{height}}px; }
+    .cover { /* your layout */ }
+  </style>
+</head>
+<body>
+  <div class="cover">
+    <!-- 3. HTML layout using Handlebars expressions -->
+    <div class="category">{{categoryLabel}}</div>
+    <div class="title">{{title}}</div>
+    {{> social-footer theme="dark"}}
+  </div>
+</body>
+</html>
+```
+
+#### Step by step
+
+1. **Create the file** — `make new-template NAME=my-theme` generates `templates/my-theme.hbs` with all placeholders ready
+2. **Customize the CSS** — modify colors, layout, fonts. The scaffold uses a gradient background; replace it with your design
+3. **Preview with a real article** — `make gen POST=content/posts/kafka/01-intro TEMPLATE=my-theme`
+4. **Export HTML preview** — `make export` regenerates `templates/html/` with your new template included
+5. **Iterate** — edit the `.hbs` file and re-run `make gen` until you're happy
+
+#### Tips
+
+- Use `rgba({{hexToRgb colors.[0]}}, 0.15)` to create transparent versions of category colors
+- Use `{{#if (eq format "linkedin")}}` for format-specific styling
+- Use `{{truncate title 50}}` to cap long titles
+- The social footer partial supports `theme="dark"` and `theme="light"`
+- Files starting with `_` (like `_scaffold.hbs`) are ignored by auto-discovery
 
 ### Template Data
 
@@ -215,31 +270,37 @@ The social footer is a shared partial at `templates/partials/_social-footer.hbs`
 
 ## Usage
 
-All commands run from the **Hugo site root** (`website.github.io/`).
+The Makefile works from **any directory** — it auto-detects paths relative to itself.
 
 ### Makefile (recommended)
 
 ```bash
-make -f scripts/cover-generator/Makefile help           # Show all commands
-make -f scripts/cover-generator/Makefile install         # Install deps + Playwright
+# From the cover-generator directory:
+make help
+make install
+make gen POST=../../content/posts/kafka/01-intro TEMPLATE=dark
+
+# From the Hugo site root:
 make -f scripts/cover-generator/Makefile gen POST=content/posts/kafka/01-intro TEMPLATE=dark
 make -f scripts/cover-generator/Makefile all SERIES=kafka TEMPLATE=dark FORMAT=linkedin
-make -f scripts/cover-generator/Makefile export          # HTML previews
-make -f scripts/cover-generator/Makefile list-templates  # Available templates
-make -f scripts/cover-generator/Makefile list-series     # Available series
-make -f scripts/cover-generator/Makefile clean           # Remove output
+make -f scripts/cover-generator/Makefile export
+make -f scripts/cover-generator/Makefile new-template NAME=my-theme
+make -f scripts/cover-generator/Makefile clean
+```
+
+### npm scripts (from cover-generator directory)
+
+```bash
+npm run gen -- <post-directory> [--template name] [--format type]
+npm run all -- <series> [--template name] [--format type]
+npm run export
 ```
 
 ### Node directly
 
 ```bash
-# Single article
 node scripts/cover-generator/index.js <post-directory> [--template name] [--format type] [--output dir]
-
-# Batch series
 node scripts/cover-generator/generate-all.js <series> [--template name] [--format type]
-
-# Export HTML previews
 node scripts/cover-generator/export-templates.js
 ```
 
@@ -317,6 +378,7 @@ scripts/cover-generator/
 │   └── categories.js      # Category detection logic
 └── templates/
     ├── *.hbs              # 16 Handlebars templates (one per file)
+    ├── _scaffold.hbs      # Scaffold for new templates (ignored by auto-discovery)
     ├── partials/
     │   └── _social-footer.hbs  # Shared social footer partial
     ├── html/              # Generated HTML previews (via export, gitignored)
@@ -327,8 +389,8 @@ scripts/cover-generator/
 
 | Error | Fix |
 |:------|:----|
-| `Cannot find module 'playwright'` | `make -f scripts/cover-generator/Makefile install` |
-| `Cannot find module 'handlebars'` | `npm install` from site root |
+| `Playwright not installed` | `npm install && npm run install-browser` (from cover-generator dir) |
+| `Cannot find module 'handlebars'` | `npm install` from cover-generator dir |
 | `Template 'xyz' not found` | `make -f scripts/cover-generator/Makefile list-templates` |
 | `Series 'xyz' not found` | `make -f scripts/cover-generator/Makefile list-series` |
 | Fonts look different | Playwright uses system fonts — install `fonts-mulish` or equivalent |
