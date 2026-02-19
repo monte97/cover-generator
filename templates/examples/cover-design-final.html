@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Design - Francesco Montelli</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Mulish', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #1a1a2e;
+            padding: 40px 20px;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 40px 0 20px 0;
+            color: #aaa;
+            text-align: center;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .cover {
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+        }
+
+        .cover.linkedin {
+            aspect-ratio: 1.91 / 1;
+        }
+
+        .cover.blog {
+            aspect-ratio: 16 / 9;
+        }
+
+        /* === MINIMAL GRADIENT WITH ICON === */
+        .style-minimal-icon {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px;
+            position: relative;
+        }
+
+        .style-minimal-icon .icon-box {
+            position: absolute;
+            top: 30px;
+            right: 40px;
+            width: 70px;
+            height: 70px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+        }
+
+        .style-minimal-icon .category {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.9;
+            margin-bottom: 12px;
+        }
+
+        .style-minimal-icon .title {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        .style-minimal-icon .brand {
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            font-size: 13px;
+            opacity: 0.7;
+            font-weight: 500;
+        }
+
+        .style-minimal-icon .meta {
+            position: absolute;
+            bottom: 20px;
+            right: 40px;
+            font-size: 13px;
+            opacity: 0.7;
+            display: flex;
+            gap: 15px;
+        }
+
+        /* === CATEGORY COLORS === */
+        /* Kafka - Purple/Orange */
+        .cat-kafka {
+            background: linear-gradient(135deg, #8B5CF6 0%, #F59E0B 100%);
+        }
+
+        /* Keycloak - Red/Pink */
+        .cat-keycloak {
+            background: linear-gradient(135deg, #DC2626 0%, #EC4899 100%);
+        }
+
+        /* Kubernetes - Blue */
+        .cat-kubernetes {
+            background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+        }
+
+        /* Testing - Green */
+        .cat-testing {
+            background: linear-gradient(135deg, #059669 0%, #10B981 100%);
+        }
+
+        /* DevOps - Indigo */
+        .cat-devops {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+
+        /* Web Development - Teal */
+        .cat-webdev {
+            background: linear-gradient(135deg, #0891B2 0%, #14B8A6 100%);
+        }
+
+        /* Security - Red/Dark */
+        .cat-security {
+            background: linear-gradient(135deg, #7F1D1D 0%, #DC2626 100%);
+        }
+
+        /* Observability - Cyan */
+        .cat-observability {
+            background: linear-gradient(135deg, #0E7490 0%, #06B6D4 100%);
+        }
+
+        /* Platform Engineering - Violet */
+        .cat-platform {
+            background: linear-gradient(135deg, #6D28D9 0%, #A855F7 100%);
+        }
+
+        /* Homelab - Emerald */
+        .cat-homelab {
+            background: linear-gradient(135deg, #047857 0%, #34D399 100%);
+        }
+
+        /* Default - Slate */
+        .cat-default {
+            background: linear-gradient(135deg, #475569 0%, #94A3B8 100%);
+        }
+
+        /* Labels */
+        .label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Cover Design - Francesco Montelli</h1>
+    <p class="subtitle">Minimal Gradient + Icon • Category Colors • Brand</p>
+
+    <div class="section-title">📱 LinkedIn Format (1200×627px)</div>
+    <div class="grid">
+        <!-- Kafka -->
+        <div class="cover linkedin style-minimal-icon cat-kafka">
+            <span class="label">Kafka</span>
+            <div class="icon-box">📡</div>
+            <div class="category">Kafka Series</div>
+            <div class="title">Architettura di un Flusso di Eventi</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 5 min</span>
+            </div>
+        </div>
+
+        <!-- Keycloak -->
+        <div class="cover linkedin style-minimal-icon cat-keycloak">
+            <span class="label">Keycloak</span>
+            <div class="icon-box">🔑</div>
+            <div class="category">Security</div>
+            <div class="title">Keycloak: Identity & Access Management</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 7 min</span>
+            </div>
+        </div>
+
+        <!-- Kubernetes -->
+        <div class="cover linkedin style-minimal-icon cat-kubernetes">
+            <span class="label">Kubernetes</span>
+            <div class="icon-box">☸️</div>
+            <div class="category">Cloud Native</div>
+            <div class="title">Cluster API: Provisioning Dichiarativo</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 10 min</span>
+            </div>
+        </div>
+
+        <!-- Testing -->
+        <div class="cover linkedin style-minimal-icon cat-testing">
+            <span class="label">Testing</span>
+            <div class="icon-box">🧪</div>
+            <div class="category">E2E Testing</div>
+            <div class="title">Playwright: Testing Infrastructure</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 6 min</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">💻 Blog Format (16:9)</div>
+    <div class="grid">
+        <!-- Kafka Blog -->
+        <div class="cover blog style-minimal-icon cat-kafka">
+            <span class="label">Kafka</span>
+            <div class="icon-box">📡</div>
+            <div class="category">Kafka Series</div>
+            <div class="title">Architettura di un Flusso di Eventi</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 5 min</span>
+            </div>
+        </div>
+
+        <!-- DevOps Blog -->
+        <div class="cover blog style-minimal-icon cat-devops">
+            <span class="label">DevOps</span>
+            <div class="icon-box">🚀</div>
+            <div class="category">CI/CD</div>
+            <div class="title">Pipeline as Code con OpenTofu</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 8 min</span>
+            </div>
+        </div>
+
+        <!-- Web Dev Blog -->
+        <div class="cover blog style-minimal-icon cat-webdev">
+            <span class="label">Web Dev</span>
+            <div class="icon-box">⚛️</div>
+            <div class="category">Vue.js 3</div>
+            <div class="title">Composables per DRY Patterns</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 5 min</span>
+            </div>
+        </div>
+
+        <!-- Observability Blog -->
+        <div class="cover blog style-minimal-icon cat-observability">
+            <span class="label">Observability</span>
+            <div class="icon-box">📊</div>
+            <div class="category">OpenTelemetry</div>
+            <div class="title">Trace Correlation & PII Filtering</div>
+            <div class="brand">francescomontelli.com</div>
+            <div class="meta">
+                <span>📖 Article</span>
+                <span>⏱️ 9 min</span>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 60px; text-align: center; color: #888;">
+        <h3 style="color: #fff; margin-bottom: 20px;">📋 Category Mapping</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; max-width: 900px; margin: 0 auto;">
+            <span style="background: linear-gradient(135deg, #8B5CF6, #F59E0B); padding: 8px 16px; border-radius: 20px; font-size: 13px;">📡 Kafka</span>
+            <span style="background: linear-gradient(135deg, #DC2626, #EC4899); padding: 8px 16px; border-radius: 20px; font-size: 13px;">🔑 Keycloak / Security</span>
+            <span style="background: linear-gradient(135deg, #2563EB, #06B6D4); padding: 8px 16px; border-radius: 20px; font-size: 13px;">☸️ Kubernetes</span>
+            <span style="background: linear-gradient(135deg, #059669, #10B981); padding: 8px 16px; border-radius: 20px; font-size: 13px;">🧪 Testing</span>
+            <span style="background: linear-gradient(135deg, #4F46E5, #7C3AED); padding: 8px 16px; border-radius: 20px; font-size: 13px;">🚀 DevOps / CI/CD</span>
+            <span style="background: linear-gradient(135deg, #0891B2, #14B8A6); padding: 8px 16px; border-radius: 20px; font-size: 13px;">⚛️ Web Development</span>
+            <span style="background: linear-gradient(135deg, #0E7490, #06B6D4); padding: 8px 16px; border-radius: 20px; font-size: 13px;">📊 Observability</span>
+            <span style="background: linear-gradient(135deg, #6D28D9, #A855F7); padding: 8px 16px; border-radius: 20px; font-size: 13px;">🏗️ Platform Engineering</span>
+            <span style="background: linear-gradient(135deg, #047857, #34D399); padding: 8px 16px; border-radius: 20px; font-size: 13px;">🏠 Homelab</span>
+        </div>
+    </div>
+</body>
+</html>
